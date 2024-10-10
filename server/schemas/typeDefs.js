@@ -17,9 +17,14 @@ const typeDefs = `
     matchups(_id: String): [Matchup]
   }
 
+  type Confirm {
+    data: String!
+  }
+
   type Mutation {
     createMatchup(tech1: String!, tech2: String!): Matchup
     createVote(_id: String!, techNum: Int!): Matchup
+    createNewUser(username: String!, password: String!): Confirm
   }
 `;
 

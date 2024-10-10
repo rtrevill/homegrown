@@ -6,6 +6,9 @@ import Home from './pages/Home';
 import Matchup from './pages/Matchup';
 import Vote from './pages/Vote';
 import NotFound from './pages/NotFound';
+import HomePage from './pages/Homepage.jsx';
+import Login from './pages/Login.jsx'
+import CreateUser from './pages/CreateUser.jsx';
 
 const router = createBrowserRouter([
   {
@@ -15,13 +18,20 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />
+        element: <HomePage />
       }, {
         path: '/matchup',
         element: <Matchup />
       }, {
         path: '/matchup/:id',
         element: <Vote />
+      }, {
+        path: '/login',
+        element: <Login />
+      },
+      {
+        path: '/newuser',
+        element: <CreateUser />
       },
     ],
   },
