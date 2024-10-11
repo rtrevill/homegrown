@@ -29,3 +29,15 @@ export const CREATE_USER = gql`
     }
   }
 `;
+
+export const LOGIN_USER = gql`
+mutation login($name: String!, $password: String!) {
+  login(name: $name, password: $password) {
+    profile {
+      _id
+      username
+    }
+    token
+  }
+}
+`;

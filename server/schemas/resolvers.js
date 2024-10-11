@@ -29,7 +29,6 @@ const resolvers = {
       return { data: "Finished"} ;
     },
     login: async (parent, { name, password }) => {
-      console.log("LOGGING IN!!");
       const profile = await User.findOne({ username: name });
 
       

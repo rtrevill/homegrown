@@ -1,6 +1,9 @@
 import { Button, Form, Input, Typography } from "antd";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LOGIN_USER } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
+import auth from "../utils/auth";
 
 const { Title } = Typography;
 
@@ -8,19 +11,34 @@ const notify = {
     error1 : () =>{ toast("Incomplete details")}
 }
 
-
-
-const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-
-const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-    notify.error1();
-  };
-
-
 function Login(){
+
+    const [login, {error, data}] = useMutation(LOGIN_USER);
+
+    const onFinish = async(values, event) => {
+        console.log('Success:', values);
+        // event.preventDefault();
+
+        try {
+            const {data} = await login({
+                variables: { 
+                    name: values.username,
+                    password: values.password
+                }
+            });
+
+            auth.login(data.login.token);
+        } catch (e) {
+            console.error(e)
+        }
+
+      };
+    
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+        notify.error1();
+      };
+    
 
     return (
         <div style={{width: 600}}>
