@@ -1,16 +1,25 @@
 import { Button, Checkbox, Form, Input } from 'antd';
+import { useMutation } from '@apollo/client';
+import { CREATE_USER } from '../utils/mutations';
+
 
 const returnHome = () => location.href = '/';
 
-const onFinish = (values) => {
-    console.log('Success:', values);
+
+function CreateUser(){
+  const [createUser, { error }] = useMutation(CREATE_USER);
+
+  const onFinish = async (values) => {
+    console.log('Success');
+    await createUser({variables: {username: values.username, password: values.password}});
   };
 
 const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
 
-function CreateUser(){
+
+
     return (
         <div>
             <h1>Create New User</h1>

@@ -12,19 +12,30 @@ const typeDefs = `
     tech2_votes: Int
   }
 
+  type Confirm {
+    data: String!
+  }
+
+  type User {
+    _id: ID!
+    username: String!
+  }
+
+  type Auth {
+    token: ID!
+    profile: User
+  }
+
   type Query {
     tech: [Tech]
     matchups(_id: String): [Matchup]
-  }
-
-  type Confirm {
-    data: String!
   }
 
   type Mutation {
     createMatchup(tech1: String!, tech2: String!): Matchup
     createVote(_id: String!, techNum: Int!): Matchup
     createNewUser(username: String!, password: String!): Confirm
+    login(name: String!, password: String!): Auth!
   }
 `;
 

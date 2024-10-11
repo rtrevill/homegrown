@@ -1,4 +1,5 @@
 const { Tech, Matchup, User } = require('../models');
+const { AuthenticationError, signToken } = require('../utils/auth')
 
 const resolvers = {
   Query: {
@@ -26,7 +27,25 @@ const resolvers = {
     createNewUser: async (parent, args) => {
       await User.create(args);
       return { data: "Finished"} ;
-    }
+    },
+    login: async (parent, { name, password }) => {
+      console.log("LOGGING IN!!");
+      const profile = await User.findOne({ username: name });
+
+      
+      if (!profile) {
+        throw AuthenticationError
+      }
+      
+      const correctPw = await profile.isCorrectPassword(password);
+      
+      if (!correctPw) {
+        throw AuthenticationError
+      }
+
+      const token = signToken(profile);
+      return { token, profile };
+    },
   },
 };
 
