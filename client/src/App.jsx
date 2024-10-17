@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import Login from "./pages/Login";
+import Navbar from "./pages/Navbar";
 
 import auth from "./utils/auth";
 
@@ -63,6 +64,7 @@ function App() {
     <ApolloProvider client={client}>
       { isLoggedIn ? (
       <div className="flex-column justify-center align-center min-100-vh bg-primary">
+        <Navbar />
         <Outlet />
       </div>
       ) : (

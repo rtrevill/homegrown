@@ -17,8 +17,8 @@ const typeDefs = `
   }
 
   type User {
-    _id: ID!
     username: String!
+    email: String!
   }
 
   type Auth {
@@ -27,9 +27,8 @@ const typeDefs = `
   }
 
   type Query {
-    tech: [Tech]
-    matchups(_id: String): [Matchup]
     sendEmail(email: String): Confirm
+    userDetails(_id: ID!): User
   }
 
   type Mutation {

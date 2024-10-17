@@ -1,4 +1,4 @@
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Flex, Form, Input, Typography } from "antd";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LOGIN_USER } from "../utils/mutations";
@@ -52,8 +52,8 @@ function Login(){
 
     return (
            userState ? (
-            <div style={{width: 600}}>
-            <Title align='center'>Login Page</Title>
+            <div style={{width: 600, display: 'flex', flexDirection: 'column' }}>
+            <Title align='center' >Login Page</Title>
         <Form
             name="basic"
             labelCol={{
@@ -109,7 +109,7 @@ function Login(){
             </Button>
         </Form.Item>
         </Form>
-        <Button id="newUserButton" onClick={()=>setUserState(false)}> Create New User</Button>
+        <Button id="newUserButton" color="primary" variant="text" onClick={()=>setUserState(false)}> Create New User</Button>
         <div>
             <ToastContainer />
         </div>

@@ -5,13 +5,6 @@ const nodemailer = require("nodemailer");
 
 const resolvers = {
   Query: {
-    tech: async () => {
-      return Tech.find({});
-    },
-    matchups: async (parent, { _id }) => {
-      const params = _id ? { _id } : {};
-      return Matchup.find(params);
-    },
     sendEmail: async (parent, {email}) => {
 
       const transporter = nodemailer.createTransport({
@@ -46,6 +39,15 @@ const resolvers = {
       main().catch(console.error);
 
       return {data: "Email Sent"};
+    },
+
+    userDetails: async (parent, {_id}) => {
+      console.log(_id)
+      try{
+        return await User.findById(_id) 
+      }catch(err){
+        throw new GraphQLError("Error with user details")
+      }
     }
   },
   Mutation: {
