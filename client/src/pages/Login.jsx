@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { LOGIN_USER } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
 import auth from "../utils/auth";
+import { useState } from "react";
+import CreateUser from "./CreateUser";
 
 const { Title } = Typography;
 
@@ -14,6 +16,7 @@ const notify = {
 function Login(){
 
     const [login, {error, data}] = useMutation(LOGIN_USER);
+    const [userState, setUserState] = useState(true)
 
     const onFinish = async(values, event) => {
         console.log('Success:', values);
@@ -41,7 +44,8 @@ function Login(){
     
 
     return (
-        <div style={{width: 600}}>
+           userState ? (
+            <div style={{width: 600}}>
             <Title align='center'>Login Page</Title>
         <Form
             name="basic"
@@ -98,12 +102,13 @@ function Login(){
             </Button>
         </Form.Item>
         </Form>
-        <a href='/newuser'>Create a new user</a>
+        <Button id="newUserButton" onClick={()=>setUserState(false)}> Create New User</Button>
         <div>
             <ToastContainer />
         </div>
 
         </div>
+        ): <CreateUser />
     )
 
 }

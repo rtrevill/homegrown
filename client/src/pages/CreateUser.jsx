@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../utils/mutations';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const returnHome = () => location.href = '/';
@@ -10,8 +11,17 @@ function CreateUser(){
   const [createUser, { error }] = useMutation(CREATE_USER);
 
   const onFinish = async (values) => {
-    console.log('Success');
-    await createUser({variables: {username: values.username, password: values.password}});
+    if (values.password !== values.password2){
+      toast("Passwords don't match")
+      return 
+    }    
+    try{
+      await createUser({variables: {username: values.username, password: values.password, email: values.email}});
+
+
+    } catch(error) {
+      toast("Someone is already using this password");
+    }
   };
 
 const onFinishFailed = (errorInfo) => {
@@ -22,7 +32,7 @@ const onFinishFailed = (errorInfo) => {
 
     return (
         <div>
-            <h1>Create New User</h1>
+            <h1 align='center'>Create New User</h1>
             <Form
     name="basic"
     labelCol={{
@@ -77,8 +87,19 @@ const onFinishFailed = (errorInfo) => {
     >
       <Input.Password />
     </Form.Item>
-
-
+    <Form.Item
+      label="Email"
+      name="email"
+      rules={[
+        {
+          required: true,
+          message: 'Please enter email',
+        }
+      ]}>
+        <Input 
+          type="email"
+          />
+      </Form.Item>
     <Form.Item
       wrapperCol={{
         offset: 8,
@@ -91,6 +112,7 @@ const onFinishFailed = (errorInfo) => {
     </Form.Item>
   </Form>
             <button onClick={returnHome}>Home</button>
+            <ToastContainer />
         </div>
     )
 }

@@ -23,11 +23,11 @@ export const CREATE_VOTE = gql`
 `;
 
 export const CREATE_USER = gql`
-  mutation createNewUser($username: String!, $password: String!) {
-    createNewUser(username: $username, password: $password) {
-      data
-    }
+mutation createNewUser($username: String!, $password: String!, $email: String!) {
+  createNewUser(username: $username, password: $password, email: $email) {
+    data
   }
+}
 `;
 
 export const LOGIN_USER = gql`

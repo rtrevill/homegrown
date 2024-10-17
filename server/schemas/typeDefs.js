@@ -29,12 +29,13 @@ const typeDefs = `
   type Query {
     tech: [Tech]
     matchups(_id: String): [Matchup]
+    sendEmail(email: String): Confirm
   }
 
   type Mutation {
     createMatchup(tech1: String!, tech2: String!): Matchup
     createVote(_id: String!, techNum: Int!): Matchup
-    createNewUser(username: String!, password: String!): Confirm
+    createNewUser(username: String!, password: String!, email: String!): Confirm
     login(name: String!, password: String!): Auth!
   }
 `;
