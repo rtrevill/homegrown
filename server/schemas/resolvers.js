@@ -70,7 +70,7 @@ const resolvers = {
 
       const checkEmail = await User.findOne({email: args.email})
       checkEmail ? errorThrow():  
-      console.log("No matches")
+      User.create(args);
       return { data: "Finished"} ;
     },
     login: async (parent, { name, password }) => {

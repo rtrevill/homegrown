@@ -7,8 +7,10 @@ import { ToastContainer, toast } from 'react-toastify';
 const returnHome = () => location.href = '/';
 
 
-function CreateUser(){
+function CreateUser(props){
   const [createUser, { error }] = useMutation(CREATE_USER);
+
+  const {loginSuccess} = props;
 
   const onFinish = async (values) => {
     if (values.password !== values.password2){
@@ -17,10 +19,11 @@ function CreateUser(){
     }    
     try{
       await createUser({variables: {username: values.username, password: values.password, email: values.email}});
-
+      loginSuccess(true)
+      
 
     } catch(error) {
-      toast("Someone is already using this password");
+      toast("Email is being used by another user");
     }
   };
 

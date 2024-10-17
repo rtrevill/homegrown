@@ -18,9 +18,16 @@ function Login(){
     const [login, {error, data}] = useMutation(LOGIN_USER);
     const [userState, setUserState] = useState(true)
 
+
+    const revertState = (state) => {
+        toast("Success");
+        setTimeout(() => {
+            setUserState(state);            
+        }, 2000);
+        // location.reload()
+    }
+
     const onFinish = async(values, event) => {
-        console.log('Success:', values);
-        // event.preventDefault();
 
         try {
             const {data} = await login({
@@ -108,7 +115,7 @@ function Login(){
         </div>
 
         </div>
-        ): <CreateUser />
+        ): <CreateUser loginSuccess={revertState}/>
     )
 
 }
