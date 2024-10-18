@@ -20,3 +20,13 @@ export const QUERY_MATCHUPS = gql`
     }
   }
 `;
+
+export const QUERY_USER = gql`
+  query userDetails($id: ID!) {
+    userDetails(_id: $id) {
+      username
+      email
+      _id
+    }
+  }
+`;
