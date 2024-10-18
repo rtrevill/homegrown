@@ -1,7 +1,3 @@
-const linkToLogin = () =>{
-    location.href="/login";
-}
-
 
 function HomePage(){
     return (

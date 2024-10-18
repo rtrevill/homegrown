@@ -17,6 +17,7 @@ const typeDefs = `
   }
 
   type User {
+    _id: ID!
     username: String!
     email: String!
   }
@@ -32,8 +33,6 @@ const typeDefs = `
   }
 
   type Mutation {
-    createMatchup(tech1: String!, tech2: String!): Matchup
-    createVote(_id: String!, techNum: Int!): Matchup
     createNewUser(username: String!, password: String!, email: String!): Confirm
     login(name: String!, password: String!): Auth!
   }
