@@ -13,7 +13,6 @@ class AuthService {
   
     isTokenExpired(token) {
       const decoded = jwtDecode(token);
-      // console.log(decoded)
       if (decoded.exp < Date.now()/1000) {
         localStorage.removeItem('id_token');
         console.log("expired");
