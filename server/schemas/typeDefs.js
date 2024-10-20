@@ -35,6 +35,7 @@ const typeDefs = `
   type Mutation {
     createNewUser(username: String!, password: String!, email: String!): Confirm
     login(name: String!, password: String!): Auth!
+    updateDefLocate(userID: ID!, lat: Float!, lng: Float!, address: String!, placeId: String!): Confirm!
   }
 `;
 

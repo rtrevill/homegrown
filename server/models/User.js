@@ -1,6 +1,23 @@
 const { Schema, model } = require('mongoose');
 const bcryptjs = require('bcryptjs');
 
+const defaultLocationSchema = new Schema({
+    address: {
+        type: String,
+    },
+    locationId: {
+        type: String
+    },
+    latitude: {
+        type: Number,
+        required: true
+    },
+    longitude: {
+        type: Number,
+        required: true
+    }
+});
+
 const userSchema = new Schema({
     username: {
         type: String,
@@ -15,10 +32,8 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    location: {
-        type: String,
-    }
-})
+    location: [defaultLocationSchema],
+});
 
 userSchema.pre('save', async function (next){
     if (this.isNew || this.isModified('password')) {
@@ -31,6 +46,7 @@ userSchema.pre('save', async function (next){
 userSchema.methods.isCorrectPassword = async function (password) {
     return bcryptjs.compareSync(password, this.password);
 };
+
 
 const User = model('User', userSchema);
 

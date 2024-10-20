@@ -1,9 +1,10 @@
-import {Button, List, Typography, Card } from 'antd'
+import {Button, List, Typography, Card, Modal } from 'antd'
 import { useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByPlaceId } from 'react-google-places-autocomplete';
 import { useMutation, useQuery } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
+import { UPDATE_LOCATION_DETAILS } from '../utils/mutations';
 import auth from '../utils/auth';
 
 
@@ -13,6 +14,38 @@ function Profile(){
     const {loading, error, data} = useQuery(QUERY_USER, {
         variables: {"id": auth.getProfile().data._id},
     });
+    const [open, setOpen] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [updateLocation, {data: data2, loading: loading2, error: error2}] = useMutation(UPDATE_LOCATION_DETAILS)
+    // const [modalText, setModalText] = useState('Content of the modal');
+  
+    console.log(value)
+
+    const showModal = () => {
+      setOpen(true);
+    };
+  
+    const handleOk = () => {
+      // setModalText('The modal will be closed after two seconds');
+      setConfirmLoading(true);
+      updateLocation({variables: {
+        userId: data.userDetails._id,
+        lat: coordinates.lat,
+        lng: coordinates.lng,
+        placeId: coordinates.placeID,
+        address: value.label
+      }})
+      setTimeout(() => {
+        setOpen(false);
+        setConfirmLoading(false);
+      }, 500);
+    };
+  
+    const handleCancel = () => {
+      console.log('Clicked cancel button');
+      setOpen(false);
+    };
+
     
     let listData = [];
       
@@ -34,7 +67,7 @@ function Profile(){
     return(
         data ? (
           <div>
-          <div>
+          {/* <div>
             <GooglePlacesAutocomplete
               apiKey="AIzaSyAjLNQI2BHb9fphLaIfxWlJ2UleP0SY8WE"
               selectProps={{
@@ -42,7 +75,7 @@ function Profile(){
                 onChange: setCoords,
               }}
               />
-          </div>
+          </div> */}
           <div style={{color: 'white'}}>
             latitude: {coordinates.lat}
             <br></br>
@@ -68,8 +101,31 @@ function Profile(){
           <Button>Local products for sale</Button>
           <Button>Advertise new produce</Button>
           <Button>History</Button>
-          <Button>Set default location</Button>
+          <Button type="primary" onClick={showModal}>Set default location</Button>
+          <Modal
+            title="Title"
+            open={open}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            <div>
 
+            <p>
+              Please select default location
+            </p>  
+            <div>
+              <GooglePlacesAutocomplete
+              apiKey="AIzaSyAjLNQI2BHb9fphLaIfxWlJ2UleP0SY8WE"
+              selectProps={{
+                value,
+                onChange: setCoords,
+              }}
+              />
+            </div>       
+            </div>
+
+          </Modal>
         </div>
         ):(
           <h1>Loading</h1>

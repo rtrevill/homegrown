@@ -1,4 +1,4 @@
-const { Tech, Matchup, User } = require('../models');
+const { User } = require('../models');
 const { AuthenticationError, signToken } = require('../utils/auth')
 const { GraphQLError } = require ('graphql');
 const nodemailer = require("nodemailer");
@@ -42,7 +42,6 @@ const resolvers = {
     },
 
     userDetails: async (parent, {_id}) => {
-      console.log(_id)
       try{
         return await User.findById(_id) 
       }catch(err){
@@ -65,6 +64,7 @@ const resolvers = {
       User.create(args);
       return { data: "Finished"} ;
     },
+
     login: async (parent, { name, password }) => {
       const profile = await User.findOne({ username: name });
 
@@ -82,6 +82,17 @@ const resolvers = {
       const token = signToken(profile);
       return { token, profile };
     },
+
+    updateDefLocate: async (parent, args) => {
+      console.log(args)
+      await User.findByIdAndUpdate(args.userID, {$set: 
+          { 'location.latitude': args.lat,
+            'location.longitude': args.lng,
+            'location.address': args.address,
+            'location.locationId': args.placeId
+          }})
+      return {data: "Returning"}
+    }
   },
 };
 
