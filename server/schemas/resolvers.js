@@ -3,6 +3,12 @@ const { AuthenticationError, signToken } = require('../utils/auth')
 const { GraphQLError } = require ('graphql');
 const nodemailer = require("nodemailer");
 
+function errorThrow(){
+  console.log("ERROR")
+  throw new GraphQLError("Email already used by another user");
+}
+
+
 const resolvers = {
   Query: {
     sendEmail: async (parent, {email}) => {
@@ -43,7 +49,7 @@ const resolvers = {
 
     userDetails: async (parent, {_id}) => {
       try{
-        return await User.findById(_id) 
+        return await User.findById(_id);
       }catch(err){
         throw new GraphQLError("Error with user details")
       }
@@ -53,11 +59,6 @@ const resolvers = {
   },
   Mutation: {
     createNewUser: async (parent, args) => {
-
-      function errorThrow(){
-          console.log("ERROR")
-          throw new GraphQLError("Too Bad");
-      }
 
       const checkEmail = await User.findOne({email: args.email})
       checkEmail ? errorThrow():  
@@ -84,7 +85,6 @@ const resolvers = {
     },
 
     updateDefLocate: async (parent, args) => {
-      console.log(args)
       await User.findByIdAndUpdate(args.userID, {$set: 
           { 'location.latitude': args.lat,
             'location.longitude': args.lng,
@@ -92,7 +92,18 @@ const resolvers = {
             'location.locationId': args.placeId
           }})
       return {data: "Returning"}
-    }
+    },
+
+    updateDetails: async (parent, args) => {
+      const { first_name, last_name, email, username, userID } = args;
+      const emailCheck = await User.findOne({email: email, _id: {$nin: [userID]}})
+      
+      if (emailCheck !== null) {errorThrow()} 
+      
+      else return await User.findByIdAndUpdate(userID, {$set: 
+          { first_name, last_name, username, email}
+        }, {new: true})
+      }    
   },
 };
 

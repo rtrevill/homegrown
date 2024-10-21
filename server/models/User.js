@@ -23,6 +23,12 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    first_name: {
+        type: String
+    },
+    last_name: {
+        type: String
+    },
     password: {
         type: String,
         required: true,

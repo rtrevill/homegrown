@@ -16,10 +16,17 @@ const typeDefs = `
     data: String!
   }
 
+  type Addresses {
+    address: String
+  }
+
   type User {
     _id: ID!
     username: String!
+    first_name: String
+    last_name: String
     email: String!
+    location: [Addresses]
   }
 
   type Auth {
@@ -36,6 +43,7 @@ const typeDefs = `
     createNewUser(username: String!, password: String!, email: String!): Confirm
     login(name: String!, password: String!): Auth!
     updateDefLocate(userID: ID!, lat: Float!, lng: Float!, address: String!, placeId: String!): Confirm!
+    updateDetails(userID: ID!, first_name: String, last_name: String, username: String, email: String): User!
   }
 `;
 
