@@ -49,6 +49,7 @@ function Profile(){
         console.log(error)
       }
       // window.location.reload()
+      
       setOpenDrawer(false);
     }
 
@@ -81,7 +82,7 @@ function Profile(){
     
     let listData = [];
 
-    console.log(listData)
+    // console.log(listData)
 
       
       error ? console.log("Error"):
@@ -90,7 +91,7 @@ function Profile(){
                       email: data.userDetails.email,
                       first_name: data.userDetails.first_name||"",
                       last_name: data.userDetails.last_name||"",
-                      default_Location: data.userDetails.location[0].address||""
+                      default_Location: data.userDetails.location[0]?.address||""
                     });
 
     const setCoords = (placeID) => {
@@ -128,7 +129,7 @@ function Profile(){
           <Button>History</Button>
           <Button type="primary" onClick={showModal}>Change Default Location</Button>
           <Button color="default" variant="solid" onClick={showDrawer} icon={<PlusOutlined />}>Update Details</Button>
-          <PasswordModal />
+          <PasswordModal announce={toast}/>
           <Modal
             title="Title"
             open={open}

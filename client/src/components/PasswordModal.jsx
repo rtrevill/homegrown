@@ -1,20 +1,39 @@
 import { useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Button, Modal, Input, Space } from 'antd';
+import { CHANGE_PASSWORD } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
+import auth from "../utils/auth";
 
-function PasswordModal () {
+
+function PasswordModal (props) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwords, setPasswords] = useState({original: "", newFirst: "", NewSecond: ""})
+    const [changePass, {data, loading, error}] = useMutation(CHANGE_PASSWORD);
 
     const showModal = () => {
       setIsModalOpen(true);
     };
   
-    const handleOk = () => {
-        // console.log(passwords)
-      setIsModalOpen(false);
+    const handleOk = async () => {
+        if (passwords.newFirst !== passwords.NewSecond){
+            return toast("New Passwords Don't Match")
+        }
+        try{
+            await changePass({variables: {
+                userId: auth.getProfile().data._id,
+                original: passwords.original,
+                newpword: passwords.NewSecond
+            }}).then((res)=>{
+                props.announce("Password Successfully Changed");
+                setPasswords({original: "", newFirst: "", NewSecond: ""});
+                setIsModalOpen(false);
+            })
+        }catch(error){
+            console.log(error)
+        }
     };
   
     const handleCancel = () => {

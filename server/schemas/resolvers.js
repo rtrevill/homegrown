@@ -2,11 +2,8 @@ const { User } = require('../models');
 const { AuthenticationError, signToken } = require('../utils/auth')
 const { GraphQLError } = require ('graphql');
 const nodemailer = require("nodemailer");
-
-function errorThrow(){
-  console.log("ERROR")
-  throw new GraphQLError("Email already used by another user");
-}
+const bcryptjs = require('bcryptjs');
+const { errorThrow } = require('../utils/smallFunctions')
 
 
 const resolvers = {
@@ -85,13 +82,33 @@ const resolvers = {
     },
 
     updateDefLocate: async (parent, args) => {
-      await User.findByIdAndUpdate(args.userID, {$set: 
-          { 'location.latitude': args.lat,
-            'location.longitude': args.lng,
-            'location.address': args.address,
-            'location.locationId': args.placeId
-          }})
-      return {data: "Returning"}
+      const {lat, lng, address, placeId, userID} = args
+      const findUser = await User.findById(userID)
+
+      if (findUser.location.length === 0){
+        try{
+          await User.findByIdAndUpdate(userID, {$set: {"location":
+            { locationtype: "default",
+              latitude: lat,
+              longitude: lng,
+              address: address,
+              locationId: placeId
+            }}})
+            return findUser
+          }catch(error){console.log(error)}
+      }
+      else{
+        try{
+          await User.findOneAndUpdate({_id: userID, "location.locationtype": "default"}, {$set: 
+            {
+              'location.$.latitude': lat,
+              'location.$.longitude': lng,
+              'location.$.address': address,
+              'location.$.locationId': placeId
+            }})
+            return findUser
+          }catch(error){console.log(error)}
+      }
     },
 
     updateDetails: async (parent, args) => {
@@ -103,7 +120,22 @@ const resolvers = {
       else return await User.findByIdAndUpdate(userID, {$set: 
           { first_name, last_name, username, email}
         }, {new: true})
-      }    
+    },
+    
+    changePassword: async (parent, args) => {
+      const {userID, original, newpword} = args;
+      const profile = await User.findById(userID);
+      const correctPw = await profile.isCorrectPassword(original);
+
+      if (!correctPw) {
+        throw AuthenticationError
+      }
+
+      const salt = bcryptjs.genSaltSync(10);
+      return await User.findByIdAndUpdate(userID, {password: 
+        bcryptjs.hashSync(newpword, salt)});
+
+    },
   },
 };
 

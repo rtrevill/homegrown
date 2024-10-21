@@ -23,7 +23,7 @@ mutation login($name: String!, $password: String!) {
 export const UPDATE_LOCATION_DETAILS = gql`
 mutation updateDefLocate($userId: ID!, $lat: Float!, $lng: Float!, $address: String!, $placeId: String!) {
   updateDefLocate(userID: $userId, lat: $lat, lng: $lng, address: $address, placeId: $placeId) {
-    data
+    username
   }
 }
 `;
@@ -39,6 +39,14 @@ export const UPDATE_USER_DETAILS = gql`
       location {
         address
       }
+    }
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation Mutation($userId: ID!, $original: String, $newpword: String) {
+    changePassword(userID: $userId, original: $original, newpword: $newpword) {
+      username
     }
   }
 `;

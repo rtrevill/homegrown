@@ -2,6 +2,11 @@ const { Schema, model } = require('mongoose');
 const bcryptjs = require('bcryptjs');
 
 const defaultLocationSchema = new Schema({
+    locationtype: {
+        type: String,
+        required: true
+    },
+
     address: {
         type: String,
     },
