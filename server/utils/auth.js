@@ -13,8 +13,8 @@ function AuthenticationError(){ new GraphQLError('Could not authenticate user.',
     },
   })};
 
-function signToken ({  username, _id }) {
-    const payload = { username, _id };
+function signToken ({  username, _id, clearance }) {
+    const payload = { username, _id, clearance };
     return jwt.sign({ data: payload }, process.env.JSON_TOKEN_SECRET, { expiresIn: expiration });
   }
 // };

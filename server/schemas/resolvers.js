@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, ProduceTypes } = require('../models');
 const { AuthenticationError, signToken } = require('../utils/auth')
 const { GraphQLError } = require ('graphql');
 const nodemailer = require("nodemailer");
@@ -56,9 +56,10 @@ const resolvers = {
   },
   Mutation: {
     createNewUser: async (parent, args) => {
-
       const checkEmail = await User.findOne({email: args.email})
-      checkEmail ? errorThrow():  
+      const checkUsername = await User.findOne({username: args.username})
+      checkEmail ? errorThrow():
+      checkUsername ? errorThrow(2):  
       User.create(args);
       return { data: "Finished"} ;
     },
@@ -135,6 +136,19 @@ const resolvers = {
       return await User.findByIdAndUpdate(userID, {password: 
         bcryptjs.hashSync(newpword, salt)});
 
+    },
+
+    addProduce: async (parent, args) => {
+      const { produce, variant } = args;
+      const smallProduce = produce.toLowerCase();
+      const smallVariant = variant.toLowerCase()||"";
+      const checking = await ProduceTypes.findOne({produce: smallProduce, variant: smallVariant})
+      if (checking){errorThrow(1)}
+      else{
+        return await ProduceTypes.create({produce: smallProduce, variant: smallVariant})
+      }
+
+      
     },
   },
 };

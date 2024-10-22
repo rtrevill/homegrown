@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcryptjs = require('bcryptjs');
+const Currentproduce = require('./currentproduce');
 
 const defaultLocationSchema = new Schema({
     locationtype: {
@@ -43,7 +44,12 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    clearance: {
+        type: Number,
+        required: true
+    },
     location: [defaultLocationSchema],
+    currentitems: [Currentproduce.CurrentProduceSchema]
 });
 
 userSchema.pre('save', async function (next){

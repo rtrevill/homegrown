@@ -18,10 +18,12 @@ function CreateUser(props){
       return 
     }    
     try{
-      await createUser({variables: {username: values.username, password: values.password, email: values.email}});
+      await createUser({variables: {
+                          username: values.username, 
+                          password: values.password, 
+                          email: values.email, 
+                          clearance: 3}});
       loginSuccess(true)
-      
-
     } catch(error) {
       toast("Email is being used by another user");
     }

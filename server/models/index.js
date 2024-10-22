@@ -1,5 +1,5 @@
-const Tech = require('./Tech');
-const Matchup = require('./Matchup');
 const User = require('./User');
+const Currentproduce = require('./currentproduce');
+const ProduceTypes = require('./producetypesmodel')
 
-module.exports = { Tech, Matchup, User };
+module.exports = { User, Currentproduce, ProduceTypes };

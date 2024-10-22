@@ -6,6 +6,8 @@ import App from './App.jsx';
 import HomePage from './pages/Homepage.jsx';
 import Login from './pages/Login.jsx'
 import Profile from './pages/Profile.jsx';
+import AddProduce from './pages/AddProduce.jsx';
+import AdvertiseNew from './pages/AdvertiseNew.jsx';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
         path: '/profile',
         element: <Profile />
       },
+      {
+        path: '/addproduce',
+        element: <AddProduce />
+      },
+      {
+        path: '/advertisenew',
+        element: <AdvertiseNew />
+      }
     ],
   },
 ]);

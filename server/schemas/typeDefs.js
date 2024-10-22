@@ -1,22 +1,11 @@
 const typeDefs = `
-  type Tech {
-    _id: ID!
-    name: String!
-  }
-
-  type Matchup {
-    _id: ID!
-    tech1: String!
-    tech2: String!
-    tech1_votes: Int
-    tech2_votes: Int
-  }
 
   type Confirm {
     data: String!
   }
 
   type Addresses {
+    locationtype: String
     address: String
   }
 
@@ -27,11 +16,23 @@ const typeDefs = `
     last_name: String
     email: String!
     location: [Addresses]
+    currentitems: [Currentproduce]
   }
 
   type Auth {
     token: ID!
     profile: User
+  }
+
+  type ProduceTypes {
+    produce: String!
+    variant: String!
+  }
+
+  type Currentproduce {
+    itemtype: ID!
+    itemdetail: ID
+    location: ID!
   }
 
   type Query {
@@ -40,11 +41,12 @@ const typeDefs = `
   }
 
   type Mutation {
-    createNewUser(username: String!, password: String!, email: String!): Confirm
+    createNewUser(username: String!, password: String!, email: String!, clearance: Int!): Confirm
     login(name: String!, password: String!): Auth!
     updateDefLocate(userID: ID!, lat: Float!, lng: Float!, address: String!, placeId: String!): User!
     updateDetails(userID: ID!, first_name: String, last_name: String, username: String, email: String): User!
     changePassword(userID: ID!, original: String, newpword: String): User!
+    addProduce(produce: String, variant: String): ProduceTypes
   }
 `;
 

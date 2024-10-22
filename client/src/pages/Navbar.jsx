@@ -36,6 +36,11 @@ function Navbar(){
                             href: '/profile',
                             title: 'Profile'
                         },
+                        {
+                            key: 'addproduce',
+                            href: '/addproduce',
+                            title: "Add Produce"
+                        }
                     ]}
                 />
                 <Button color="danger" variant="text" onClick={logoutFunc}>Logout</Button>
