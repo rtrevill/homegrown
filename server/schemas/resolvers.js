@@ -52,7 +52,10 @@ const resolvers = {
       }
     },
 
-
+    findProduce: async (parent, {string}) => {
+      console.log(string)
+      return await ProduceTypes.find({produce: string})
+    }
   },
   Mutation: {
     createNewUser: async (parent, args) => {

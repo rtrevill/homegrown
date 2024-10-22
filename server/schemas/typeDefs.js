@@ -38,6 +38,7 @@ const typeDefs = `
   type Query {
     sendEmail(email: String): Confirm
     userDetails(_id: ID!): User
+    findProduce(string: String): [ProduceTypes]
   }
 
   type Mutation {
