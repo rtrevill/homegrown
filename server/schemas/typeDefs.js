@@ -33,7 +33,13 @@ const typeDefs = `
   type Currentproduce {
     itemtype: ID!
     itemdetail: ID
-    location: ID!
+    location: ID
+  }
+    
+  input UserCurrentproduce {
+    itemtype: ID!
+    itemdetail: ID
+    location: ID
   }
 
   type Query {
@@ -49,7 +55,7 @@ const typeDefs = `
     updateDetails(userID: ID!, first_name: String, last_name: String, username: String, email: String): User!
     changePassword(userID: ID!, original: String, newpword: String): User!
     addProduce(produce: String, variant: String): ProduceTypes
-    addUserProduce(userID: ID!, itemtype: [ID!], itemdetail: [ID], location: ID): Confirm
+    addUserProduce(userID: ID!, produce: [UserCurrentproduce]): User!
   }
 `;
 

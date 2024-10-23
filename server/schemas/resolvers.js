@@ -156,10 +156,7 @@ const resolvers = {
 
     addUserProduce: async (parent, args) => {
       console.log(args)
-      // await ProduceTypes.find({_id: {$in: args.itemtype}})
-      await User.findByIdAndUpdate(args.userID, {$addToSet: {currentitems: {$each: ["67181a6251981b974f19de83",
-        "67181a7451981b974f19de86"]}}})
-      return {data: "Clean"}
+      return await User.findByIdAndUpdate(args.userID, {$addToSet: {currentitems: {$each: args.produce}}})
     }
   },
 };

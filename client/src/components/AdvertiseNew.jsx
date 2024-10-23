@@ -1,8 +1,10 @@
-import { Button } from 'antd'
+import { Button, Input, Space, Typography } from 'antd'
 import { FIND_PRODUCE } from '../utils/queries';
 import { useLazyQuery } from '@apollo/client';
 import { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
+
+const { TextArea } = Input;
 
 
 
@@ -63,12 +65,15 @@ function AdvertiseNew(props){
         if (!selectedProduce){
             return
         }
+        const productNotes = document.getElementById("ExtraNotes").value
         const produceObject = returnedProduce.find((object) => object.produce===selectedProduce&&object.variant===selectedVariant)
-        props.addNew(produceObject)
+        let data = JSON.parse(JSON.stringify(produceObject));
+        data["Notes"] = productNotes;
+        props.addNew(data)
     }
 
     return(
-        <div>
+        <div style={{minWidth: 600, maxWidth: 800}}>
             <input onChange={findProduce} ></input>
             <select onChange={setProd} id="Produce Selector">
                 {   produce.map((number)=>{
@@ -83,6 +88,11 @@ function AdvertiseNew(props){
                     })
                 }
             </select>
+            <>
+            <Typography style={{margin: 15, fontSize: 30}}>Extra Notes</Typography>
+            <TextArea rows={4} placeholder="Please add any extra notes for this item" id="ExtraNotes" />
+            </>
+
 
             <Button color="default" variant="solid" icon={<PlusOutlined />} onClick={addToList}>Add To List</Button>
         </div>

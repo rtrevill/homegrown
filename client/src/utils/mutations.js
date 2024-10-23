@@ -51,11 +51,19 @@ export const CHANGE_PASSWORD = gql`
   }
 `;
 
-export const ADD_PRODUCE =gql`
+export const ADD_PRODUCE = gql`
   mutation addProduce($produce: String, $variant: String) {
     addProduce(produce: $produce, variant: $variant) {
       produce
       variant
+    }
+  }
+`;
+
+export const ADD_USER_PRODUCE = gql`
+  mutation addUserProduce($userId: ID!, $produce: [UserCurrentproduce]) {
+    addUserProduce(userID: $userId, produce: $produce) {
+      first_name
     }
   }
 `;

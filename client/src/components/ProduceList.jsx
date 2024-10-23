@@ -32,7 +32,7 @@ function ProduceList(props){
                             </div>
                                 }
                     description={<div style={{display: "flex", justifyContent: "space-between", fontSize: 25}}>
-                                    {item.variant}  
+                                    {item.variant} Notes: {item.Notes}
                                     <img src="/icons8-delete.svg" onClick={()=>deleteEntry(index)}/>
                                 </div> }
                     />
