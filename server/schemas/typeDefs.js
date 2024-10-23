@@ -25,6 +25,7 @@ const typeDefs = `
   }
 
   type ProduceTypes {
+    _id: ID!
     produce: String!
     variant: String!
   }
@@ -48,6 +49,7 @@ const typeDefs = `
     updateDetails(userID: ID!, first_name: String, last_name: String, username: String, email: String): User!
     changePassword(userID: ID!, original: String, newpword: String): User!
     addProduce(produce: String, variant: String): ProduceTypes
+    addUserProduce(userID: ID!, itemtype: [ID!], itemdetail: [ID], location: ID): Confirm
   }
 `;
 

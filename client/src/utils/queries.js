@@ -17,6 +17,7 @@ export const QUERY_USER = gql`
 export const FIND_PRODUCE = gql`
   query findProduce($string: String) {
     findProduce(string: $string) {
+      _id
       produce
       variant
     }

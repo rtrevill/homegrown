@@ -11,7 +11,7 @@ const CurrentProduceSchema = new Schema({
     },
     location: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: false
     },
 });
 

@@ -37,7 +37,7 @@ function AddProduce(){
         try{
             await addNewProduce({variables: values});
             toast("Success");
-            form.resetFields();
+            // form.resetFields();
         }catch(error){
             toast(error.message)
         }
