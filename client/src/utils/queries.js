@@ -8,7 +8,9 @@ export const QUERY_USER = gql`
       last_name
       email
       location{
-      address}
+      locationtype
+      address
+      _id}
       _id
     }
   }

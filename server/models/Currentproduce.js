@@ -5,8 +5,16 @@ const CurrentProduceSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
+    itemproduce: {
+        type: String,
+        required: true
+    },
+    itemvariant: {
+        type: String,
+        required: true
+    },
     itemdetail: {
-        type: Schema.Types.ObjectId,
+        type: String,
         required: false,
     },
     location: {

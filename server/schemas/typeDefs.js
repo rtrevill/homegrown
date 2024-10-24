@@ -7,6 +7,7 @@ const typeDefs = `
   type Addresses {
     locationtype: String
     address: String
+    _id: ID
   }
 
   type User {
@@ -31,14 +32,19 @@ const typeDefs = `
   }
 
   type Currentproduce {
+    _id: ID
     itemtype: ID!
-    itemdetail: ID
+    itemproduce: String!
+    itemvariant: String!
+    itemdetail: String
     location: ID
   }
     
   input UserCurrentproduce {
     itemtype: ID!
-    itemdetail: ID
+    itemproduce: String!
+    itemvariant: String!
+    itemdetail: String
     location: ID
   }
 

@@ -1,32 +1,39 @@
-import { Button, Input, Space, Typography } from 'antd'
-import { FIND_PRODUCE } from '../utils/queries';
-import { useLazyQuery } from '@apollo/client';
+import { Button, Input, Typography, Select, Space } from 'antd'
+import { FIND_PRODUCE, QUERY_USER } from '../utils/queries';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
+import auth from '../utils/auth';
 
 const { TextArea } = Input;
-
 
 
 function AdvertiseNew(props){
     const [returnedProduce, setReturnedProduce] = useState([]);
     const [produce, setProduce] = useState([]);
     const [variants, setVariants] = useState([]);
-    const [selectedProduce, setSelectedProduce] = useState();
-    const [selectedVariant, setSelectedVariant] = useState();
+    const [selectedProdVar, setSelectedProdVar] = useState({produce: "", variant: "", location: ""})
+    const [location, setLocation] = useState([])
     const [getProduce, {loading, error, data}] = useLazyQuery(FIND_PRODUCE);
+    const {loading: loading2, error: error2, data: data2} = useQuery(QUERY_USER, {
+        variables: {id: auth.getProfile().data._id}
+    });
+
+    console.log(selectedProdVar)
+    // console.log(location)
 
     const setProd = (e) => {
-        e.target.id==="Produce Selector" ? setSelectedProduce(e.target.value):
-        setSelectedVariant(e.target.value)
+
+        e.target.id=="Produce Selector" ? setSelectedProdVar({...selectedProdVar, produce: e.target.value}):
+        setSelectedProdVar({...selectedProdVar, variant: e.target.value})
     }
 
     const determineVariants = () => {
-        const narrowedSearch = returnedProduce.filter((entry) => entry.produce===selectedProduce);
+        const narrowedSearch = returnedProduce.filter((entry) => entry.produce===selectedProdVar.produce);
         const filteredForVariants = narrowedSearch.map((each) => {return each.variant})
-        // console.log(narrowedSearch, filteredForVariants);
+        console.log(narrowedSearch, filteredForVariants);
         setVariants(filteredForVariants);
-        setSelectedVariant(filteredForVariants[0])
+        setSelectedProdVar({...selectedProdVar, variant: filteredForVariants[0]})
     }
 
     let shortenedArray = [];
@@ -48,54 +55,98 @@ function AdvertiseNew(props){
             const searchResponse = searchProduce.data.findProduce;
             setReturnedProduce(searchResponse);
     }
- 
+
+    const clearForms = async () => {
+        document.getElementById("Searchbar").value="";
+        setProduce([]);
+    }
+
     useEffect(()=>{
-        determineVariants();
-    },[selectedProduce])
+        if(selectedProdVar.produce===""){
+            return
+        }
+        else{
+            console.log("Random", selectedProdVar.produce)
+            determineVariants();
+        }
+    },[selectedProdVar.produce])
+
 
     useEffect(() => {
-        setSelectedProduce(produce[0])
+        setSelectedProdVar({...selectedProdVar, produce: produce[0]})
     },[produce])
 
     useEffect(() => {
         neatenArray()
     }, [returnedProduce])
 
+    useEffect(() => {
+        clearForms()
+    },[props.trigger])
+
+    useEffect(() => {
+            setLocation(data2?.userDetails.location.map((location) => ({...location, value: location._id, label: location.address})))
+            console.log(data2?.userDetails
+            )
+    },[data2])
+
     const addToList = () => {
-        if (!selectedProduce){
+        if (selectedProdVar.produce===""){
             return
         }
         const productNotes = document.getElementById("ExtraNotes").value
-        const produceObject = returnedProduce.find((object) => object.produce===selectedProduce&&object.variant===selectedVariant)
+        const produceObject = returnedProduce.find((object) => object.produce===selectedProdVar.produce&&object.variant===selectedProdVar.variant)
         let data = JSON.parse(JSON.stringify(produceObject));
         data["Notes"] = productNotes;
+        data["Location"] = selectedProdVar.location
         props.addNew(data)
     }
 
+    const handleChange = (value) => {
+        console.log(`selected ${value}`);
+        setSelectedProdVar({...selectedProdVar, location: value})
+      };
+
     return(
+  
         <div style={{minWidth: 600, maxWidth: 800}}>
-            <input onChange={findProduce} ></input>
+        { loading2 ? <h4>Loading</h4> : (
+
+        <div>
+            <input onChange={findProduce} id="Searchbar"></input>
             <select onChange={setProd} id="Produce Selector">
-                {   produce.map((number)=>{
-                    return <option value={number} key={number}>{number}</option>
-                })
-                }
-            </select>
-            <select onChange={setProd} id="Variant Selector">
-                {
-                    variants.map((vari) => {
-                        return <option value={vari} key={vari}>{vari}</option>
-                    })
-                }
-            </select>
-            <>
-            <Typography style={{margin: 15, fontSize: 30}}>Extra Notes</Typography>
-            <TextArea rows={4} placeholder="Please add any extra notes for this item" id="ExtraNotes" />
-            </>
-
-
-            <Button color="default" variant="solid" icon={<PlusOutlined />} onClick={addToList}>Add To List</Button>
+            {   produce.map((number)=>{
+                return <option value={number} key={number}>{number}</option>
+            })
+        }
+        </select>
+        <select onChange={setProd} id="Variant Selector">
+        {
+            variants.map((vari) => {
+                return <option value={vari} key={vari}>{vari}</option>
+            })
+        }
+        </select>
+        <div style={{marginBottom: 20}}>
+        <Typography style={{margin: 15, fontSize: 30}}>Extra Notes</Typography>
+        <TextArea rows={4} placeholder="Please add any extra notes for this item" id="ExtraNotes" allowClear={true} />
         </div>
+        <Space>
+        <Select
+            defaultValue="Select Pickup Location"
+            style={{width: 350}}
+            onChange={handleChange}
+            options={location}
+            />
+        </Space>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+        <Button color="default" variant="solid" icon={<PlusOutlined />} onClick={addToList} id="AddToListButton">Add To List</Button>
+        </div>
+        </div>
+        )
+        }
+        </div>
+
     )
 };
 

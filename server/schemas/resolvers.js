@@ -54,7 +54,7 @@ const resolvers = {
 
     findProduce: async (parent, {string}) => {
       const regexString = new RegExp(`^${string}`)
-      return await ProduceTypes.find({produce: regexString})
+      return await ProduceTypes.find({produce: regexString}).sort({variant: 1})
     }
   },
   Mutation: {
