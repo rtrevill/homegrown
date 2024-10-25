@@ -16,7 +16,7 @@ function AdvertiseNew(props){
     const [location, setLocation] = useState([])
     const [getProduce, {loading, error, data}] = useLazyQuery(FIND_PRODUCE);
     const {loading: loading2, error: error2, data: data2} = useQuery(QUERY_USER, {
-        variables: {id: auth.getProfile().data._id}
+        variables: {userId: auth.getProfile().data._id}
     });
 
     console.log(selectedProdVar)
@@ -85,9 +85,8 @@ function AdvertiseNew(props){
     },[props.trigger])
 
     useEffect(() => {
-            setLocation(data2?.userDetails.location.map((location) => ({...location, value: location._id, label: location.address})))
-            console.log(data2?.userDetails
-            )
+            setLocation(data2?.userDetails.produceLocation.map((location) => ({...location, value: location._id, label: location.address})))
+            console.log(data2?.userDetails)
     },[data2])
 
     const addToList = () => {

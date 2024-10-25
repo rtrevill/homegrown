@@ -1,8 +1,10 @@
 const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const CurrentProduceSchema = new Schema({
+
+const CurrentProduceSchema = new mongoose.Schema({
     itemtype: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     itemproduce: {
@@ -18,7 +20,7 @@ const CurrentProduceSchema = new Schema({
         required: false,
     },
     location: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: false
     },
 });

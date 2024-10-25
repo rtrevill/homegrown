@@ -1,30 +1,10 @@
 const { Schema, model } = require('mongoose');
 const bcryptjs = require('bcryptjs');
 const Currentproduce = require('./currentproduce');
+const mongoose = require('mongoose');
 
-const defaultLocationSchema = new Schema({
-    locationtype: {
-        type: String,
-        required: true
-    },
 
-    address: {
-        type: String,
-    },
-    locationId: {
-        type: String
-    },
-    latitude: {
-        type: Number,
-        required: true
-    },
-    longitude: {
-        type: Number,
-        required: true
-    }
-});
-
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true
@@ -48,8 +28,13 @@ const userSchema = new Schema({
         type: Number,
         required: true
     },
-    location: [defaultLocationSchema],
-    currentitems: [Currentproduce.CurrentProduceSchema]
+    currentitems: [Currentproduce.CurrentProduceSchema],
+    produceLocation: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Location"
+        }
+    ]
 });
 
 userSchema.pre('save', async function (next){

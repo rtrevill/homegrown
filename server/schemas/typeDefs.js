@@ -4,10 +4,13 @@ const typeDefs = `
     data: String!
   }
 
-  type Addresses {
-    locationtype: String
-    address: String
-    _id: ID
+  type Location {
+      _id: ID
+      locationtype: String!
+      address: String
+      locationId: String
+      latitude: Float
+      longitude: Float
   }
 
   type User {
@@ -16,8 +19,8 @@ const typeDefs = `
     first_name: String
     last_name: String
     email: String!
-    location: [Addresses]
     currentitems: [Currentproduce]
+    produceLocation: [Location]
   }
 
   type Auth {
@@ -50,14 +53,14 @@ const typeDefs = `
 
   type Query {
     sendEmail(email: String): Confirm
-    userDetails(_id: ID!): User
+    userDetails(userID: ID): User
     findProduce(string: String): [ProduceTypes]
   }
 
   type Mutation {
     createNewUser(username: String!, password: String!, email: String!, clearance: Int!): Confirm
     login(name: String!, password: String!): Auth!
-    updateDefLocate(userID: ID!, lat: Float!, lng: Float!, address: String!, placeId: String!): User!
+    updateDefLocate(userID: ID!, lat: Float!, lng: Float!, address: String!, placeId: String!): User
     updateDetails(userID: ID!, first_name: String, last_name: String, username: String, email: String): User!
     changePassword(userID: ID!, original: String, newpword: String): User!
     addProduce(produce: String, variant: String): ProduceTypes

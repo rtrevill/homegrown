@@ -16,7 +16,7 @@ function Profile(){
     const [value, setValue] = useState(null);
     const [coordinates, setCoordinates] = useState({lat:0,lng:0,placeID:null})
     const {loading, error, data} = useQuery(QUERY_USER, {
-        variables: {"id": auth.getProfile().data._id},
+        variables: {"userId": auth.getProfile().data._id},
     });
     const [open, setOpen] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -24,6 +24,8 @@ function Profile(){
     const [updateLocation, {data: data2, loading: loading2, error: error2}] = useMutation(UPDATE_LOCATION_DETAILS);
     const [updateUser, { data: data3, loading: loading3, error: error3}] = useMutation(UPDATE_USER_DETAILS);
   
+
+    console.log(data)
 
     const showDrawer = () => {
       setOpenDrawer(true);
@@ -61,7 +63,7 @@ function Profile(){
     const handleOk = () => {
       setConfirmLoading(true);
       updateLocation({variables: {
-        userId: data.userDetails._id,
+        userId: auth.getProfile().data._id,
         lat: coordinates.lat,
         lng: coordinates.lng,
         placeId: coordinates.placeID,
@@ -82,7 +84,7 @@ function Profile(){
     
     let listData = [];
 
-    // console.log(listData)
+    console.log(data)
 
       
       error ? console.log("Error"):
@@ -91,7 +93,7 @@ function Profile(){
                       email: data.userDetails.email,
                       first_name: data.userDetails.first_name||"",
                       last_name: data.userDetails.last_name||"",
-                      default_Location: data.userDetails.location[0]?.address||""
+                      default_Location: data.userDetails.produceLocation[0]?.address||""
                     });
 
     const setCoords = (placeID) => {

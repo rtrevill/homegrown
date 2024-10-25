@@ -1,4 +1,4 @@
-const { User, ProduceTypes } = require('../models');
+const { User, ProduceTypes, Location } = require('../models');
 const { AuthenticationError, signToken } = require('../utils/auth')
 const { GraphQLError } = require ('graphql');
 const nodemailer = require("nodemailer");
@@ -44,9 +44,9 @@ const resolvers = {
       return {data: "Email Sent"};
     },
 
-    userDetails: async (parent, {_id}) => {
+    userDetails: async (parent, {userID}) => {
       try{
-        return await User.findById(_id);
+        return await User.findById(userID).populate('produceLocation');
       }catch(err){
         throw new GraphQLError("Error with user details")
       }
@@ -88,30 +88,35 @@ const resolvers = {
     updateDefLocate: async (parent, args) => {
       const {lat, lng, address, placeId, userID} = args
       const findUser = await User.findById(userID)
-
-      if (findUser.location.length === 0){
+      if (findUser.produceLocation.length===0){
         try{
-          await User.findByIdAndUpdate(userID, {$set: {"location":
+          const setLocation = await Location.create(     
             { locationtype: "default",
-              latitude: lat,
-              longitude: lng,
-              address: address,
-              locationId: placeId
-            }}})
-            return findUser
-          }catch(error){console.log(error)}
+             latitude: lat,
+             longitude: lng,
+             address: address,
+             locationId: placeId})
+          const updateUser = await User.findByIdAndUpdate(userID,  {$push: {produceLocation:setLocation._id}})
+          return updateUser
+
+        }catch(error){
+          console.log(error)
+        }
       }
       else{
         try{
-          await User.findOneAndUpdate({_id: userID, "location.locationtype": "default"}, {$set: 
-            {
-              'location.$.latitude': lat,
-              'location.$.longitude': lng,
-              'location.$.address': address,
-              'location.$.locationId': placeId
-            }})
-            return findUser
-          }catch(error){console.log(error)}
+          const setLocation = await Location.create(     
+            { locationtype: "other",
+             latitude: lat,
+             longitude: lng,
+             address: address,
+             locationId: placeId})
+          const updateUser = await User.findByIdAndUpdate(userID,  {$push: {produceLocation:setLocation._id}})
+          return updateUser
+
+        }catch(error){
+          console.log(error)
+        }
       }
     },
 
