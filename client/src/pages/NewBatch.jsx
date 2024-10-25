@@ -13,14 +13,13 @@ function NewBatch(){
     const [batchList, setBatchList] = useState([]);
     const [trigger, setTrigger] = useState(0);
 
-    console.log(batchList)
+    // console.log(batchList)
 
     const addToBatch = (newItem) => {
         setBatchList([...batchList, newItem])
     }
 
     const removeBatch = (index) => {
-        // console.log(index)
         setBatchList(
             batchList.filter((_, i) => i !== index)
         )
@@ -33,9 +32,8 @@ function NewBatch(){
     }
 
     const saveToDB = async () => {
-        const batchToSend = batchList.map((product) => ({   "itemtype": product._id,
-                                                            "itemproduce": product.produce,
-                                                            "itemvariant": product.variant,
+        const batchToSend = batchList.map((product) => ({   
+                                                            "producetype": product._id,
                                                             "itemdetail": product.Notes,
                                                             "location": product.Location
                                         }) )
@@ -52,16 +50,16 @@ function NewBatch(){
 
     return (
         <div>
-        <AdvertiseNew 
-            addNew={addToBatch}
-            trigger={trigger}
-        />
-        <ProduceList 
-            currentList={batchList}
-            deleteOne={removeBatch}
-            saveAll={saveToDB}
-        />
-        <ToastContainer />
+            <AdvertiseNew 
+                addNew={addToBatch}
+                trigger={trigger}
+            />
+            <ProduceList 
+                currentList={batchList}
+                deleteOne={removeBatch}
+                saveAll={saveToDB}
+            />
+            <ToastContainer />
         </div>
     )
 }

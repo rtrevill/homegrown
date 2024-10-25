@@ -36,17 +36,13 @@ const typeDefs = `
 
   type Currentproduce {
     _id: ID
-    itemtype: ID!
-    itemproduce: String!
-    itemvariant: String!
+    producetype: ID!
     itemdetail: String
     location: ID
   }
     
   input UserCurrentproduce {
-    itemtype: ID!
-    itemproduce: String!
-    itemvariant: String!
+    producetype: ID!
     itemdetail: String
     location: ID
   }

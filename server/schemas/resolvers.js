@@ -160,8 +160,13 @@ const resolvers = {
     },
 
     addUserProduce: async (parent, args) => {
-      console.log(args)
-      return await User.findByIdAndUpdate(args.userID, {$addToSet: {currentitems: {$each: args.produce}}})
+      try{
+        return await User.findByIdAndUpdate(args.userID, {$addToSet: {
+          currentitems: {$each: args.produce}}})
+      }catch(error){
+        console.log(error)
+        throw new GraphQLError(error)
+      }
     }
   },
 };

@@ -3,17 +3,9 @@ const mongoose = require('mongoose');
 
 
 const CurrentProduceSchema = new mongoose.Schema({
-    itemtype: {
+    producetype: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
-    itemproduce: {
-        type: String,
-        required: true
-    },
-    itemvariant: {
-        type: String,
-        required: true
+        ref: 'ProduceTypes'
     },
     itemdetail: {
         type: String,
