@@ -12,6 +12,7 @@ const typeDefs = `
       latitude: Float
       longitude: Float
       longlat: [Float]
+      userRef: User
   }
 
   type User {
@@ -37,7 +38,7 @@ const typeDefs = `
 
   type Currentproduce {
     _id: ID
-    producetype: ID!
+    producetype: ProduceTypes
     itemdetail: String
     location: ID
   }

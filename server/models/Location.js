@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, default: mongoose } = require('mongoose');
 
 
 const locationSchema = new Schema({
@@ -23,6 +23,10 @@ const locationSchema = new Schema({
     longlat: {
         type: [Number],
         required: true
+    },
+    userRef: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
 });
 

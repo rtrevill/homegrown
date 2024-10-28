@@ -60,9 +60,82 @@ const resolvers = {
     findProdLocations: async (parent, {radius}) => {
       const radDetermine = radius/6378.1
       try{
-        return await Location.find(
-          {longlat: {$geoWithin: {$centerSphere: [[146.4325216, -36.4412949], radDetermine]}} }
-        );
+        // const tryThis =  await Location.find(
+        //   {longlat: {$geoWithin: {$centerSphere: [[146.4325216, -36.4412949], radDetermine]}} }
+        // )
+        // .populate({
+        //   path: "userRef",
+        // })
+
+        const tryThis = await Location.aggregate(
+          [
+            {
+              $match:
+                /**
+                 * query: The query in MQL.
+                 */
+                {
+                  longlat: {
+                    $geoWithin: {
+                      $centerSphere: [
+                        [146.4325216, -36.4412949],
+                        5 / 6378.1
+                      ]
+                    }
+                  }
+                }
+            },
+            {
+              $lookup:
+                /**
+                 * from: The target collection.
+                 * localField: The local join field.
+                 * foreignField: The target join field.
+                 * as: The name for the results.
+                 * pipeline: Optional pipeline to run on the foreign collection.
+                 * let: Optional variables to use in the pipeline field stages.
+                 */
+                {
+                  from: "users",
+                  localField: "userRef",
+                  foreignField: "_id",
+                  as: "userref"
+                }
+            },
+            {
+              $unwind:
+                /**
+                 * path: Path to the array field.
+                 * includeArrayIndex: Optional name for index.
+                 * preserveNullAndEmptyArrays: Optional
+                 *   toggle to unwind null and empty values.
+                 */
+                {
+                  path: "$userref"
+                }
+            },
+            {
+              $unwind:
+                /**
+                 * query: The query in MQL.
+                 */
+                {
+                  path: "$userref.currentitems"
+                }
+            },
+            // {
+            //   $match:
+            //     /**
+            //      * query: The query in MQL.
+            //      */
+            //     {
+            //       "userref.currentitems.location": "_id"
+            //     }
+            // }
+          ]
+        )
+        console.log(tryThis)
+        return tryThis
       }catch(error){
         throw new GraphQLError(error)
       }
@@ -108,7 +181,8 @@ const resolvers = {
              longitude: lng,
              longlat: createLongLat,
              address: address,
-             locationId: placeId})
+             locationId: placeId,
+              userRef: userID})
           const updateUser = await User.findByIdAndUpdate(userID,  {$push: {produceLocation:setLocation._id}})
           return updateUser
 
@@ -124,7 +198,8 @@ const resolvers = {
              longitude: lng,
              longlat: createLongLat,
              address: address,
-             locationId: placeId})
+             locationId: placeId,
+              userRef: userID})
           const updateUser = await User.findByIdAndUpdate(userID,  {$push: {produceLocation:setLocation._id}})
           return updateUser
 
