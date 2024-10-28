@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 const mongoose = require('mongoose');
 
 
-const CurrentProduceSchema = new mongoose.Schema({
+const CurrentProduceSchema = new Schema({
     producetype: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProduceTypes'

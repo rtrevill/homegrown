@@ -13,6 +13,7 @@ const typeDefs = `
       longitude: Float
       longlat: [Float]
       userRef: User
+      userref: User
   }
 
   type User {
@@ -22,6 +23,7 @@ const typeDefs = `
     last_name: String
     email: String!
     currentitems: [Currentproduce]
+    currentproduce: [Currentproduce]
     produceLocation: [Location]
   }
 
@@ -63,7 +65,7 @@ const typeDefs = `
     updateDetails(userID: ID!, first_name: String, last_name: String, username: String, email: String): User!
     changePassword(userID: ID!, original: String, newpword: String): User!
     addProduce(produce: String, variant: String): ProduceTypes
-    addUserProduce(userID: ID!, produce: [UserCurrentproduce]): User!
+    addUserProduce(userID: ID!, produce: [UserCurrentproduce]): Confirm
   }
 `;
 

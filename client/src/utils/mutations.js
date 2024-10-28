@@ -63,7 +63,7 @@ export const ADD_PRODUCE = gql`
 export const ADD_USER_PRODUCE = gql`
   mutation addUserProduce($userId: ID!, $produce: [UserCurrentproduce]) {
     addUserProduce(userID: $userId, produce: $produce) {
-      first_name
+      data
     }
   }
 `;

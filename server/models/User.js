@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     currentitems: [Currentproduce.CurrentProduceSchema],
+    currentproduce: [
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Currentproduce"
+        }
+    ],
     produceLocation: [
         {
             type: mongoose.Schema.Types.ObjectId,
