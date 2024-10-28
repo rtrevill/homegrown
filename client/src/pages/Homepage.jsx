@@ -8,6 +8,7 @@ function HomePage(){
             <button>send email</button>
             <Button>Local products for sale</Button>
           <Button onClick={()=>window.location.replace('/advertisenew')}>Advertise new produce</Button>
+          <Button onClick={() => window.location.replace('findlocal')}>Find Local Produce</Button>
 
         </div>
     )

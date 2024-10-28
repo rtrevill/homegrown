@@ -10,9 +10,6 @@ query userDetails($userId: ID) {
     email
     currentitems {
       _id
-      itemtype
-      itemproduce
-      itemvariant
       itemdetail
       location
     }
@@ -23,6 +20,7 @@ query userDetails($userId: ID) {
       locationId
       latitude
       longitude
+      longlat
     }
   }
 }
@@ -34,6 +32,20 @@ export const FIND_PRODUCE = gql`
       _id
       produce
       variant
+    }
+  }
+`;
+
+export const FIND_PROD_LOCATIONS = gql`
+  query findProdLocations($radius: Int) {
+    findProdLocations(radius: $radius) {
+      _id
+      locationtype
+      address
+      locationId
+      latitude
+      longitude
+      longlat
     }
   }
 `;

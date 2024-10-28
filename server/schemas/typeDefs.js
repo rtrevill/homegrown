@@ -11,6 +11,7 @@ const typeDefs = `
       locationId: String
       latitude: Float
       longitude: Float
+      longlat: [Float]
   }
 
   type User {
@@ -51,6 +52,7 @@ const typeDefs = `
     sendEmail(email: String): Confirm
     userDetails(userID: ID): User
     findProduce(string: String): [ProduceTypes]
+    findProdLocations(radius: Int): [Location]
   }
 
   type Mutation {

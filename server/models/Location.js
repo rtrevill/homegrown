@@ -20,6 +20,10 @@ const locationSchema = new Schema({
         type: Number,
         required: true
     },
+    longlat: {
+        type: [Number],
+        required: true
+    }
 });
 
 const Location = model('Location', locationSchema);

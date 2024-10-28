@@ -8,6 +8,7 @@ import Login from './pages/Login.jsx'
 import Profile from './pages/Profile.jsx';
 import AddProduce from './pages/AddProduce.jsx';
 import NewBatch from './pages/NewBatch.jsx';
+import FindLocal from './pages/findLocal.jsx';
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,11 @@ const router = createBrowserRouter([
       {
         path: '/advertisenew',
         element: <NewBatch />
-      }
+      },
+      {
+        path: '/findlocal',
+        element: <FindLocal />
+      },
     ],
   },
 ]);

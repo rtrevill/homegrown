@@ -55,6 +55,17 @@ const resolvers = {
     findProduce: async (parent, {string}) => {
       const regexString = new RegExp(`^${string}`)
       return await ProduceTypes.find({produce: regexString}).sort({variant: 1})
+    },
+
+    findProdLocations: async (parent, {radius}) => {
+      const radDetermine = radius/6378.1
+      try{
+        return await Location.find(
+          {longlat: {$geoWithin: {$centerSphere: [[146.4325216, -36.4412949], radDetermine]}} }
+        );
+      }catch(error){
+        throw new GraphQLError(error)
+      }
     }
   },
   Mutation: {
@@ -87,6 +98,7 @@ const resolvers = {
 
     updateDefLocate: async (parent, args) => {
       const {lat, lng, address, placeId, userID} = args
+      const createLongLat = [lng, lat]
       const findUser = await User.findById(userID)
       if (findUser.produceLocation.length===0){
         try{
@@ -94,6 +106,7 @@ const resolvers = {
             { locationtype: "default",
              latitude: lat,
              longitude: lng,
+             longlat: createLongLat,
              address: address,
              locationId: placeId})
           const updateUser = await User.findByIdAndUpdate(userID,  {$push: {produceLocation:setLocation._id}})
@@ -109,6 +122,7 @@ const resolvers = {
             { locationtype: "other",
              latitude: lat,
              longitude: lng,
+             longlat: createLongLat,
              address: address,
              locationId: placeId})
           const updateUser = await User.findByIdAndUpdate(userID,  {$push: {produceLocation:setLocation._id}})
