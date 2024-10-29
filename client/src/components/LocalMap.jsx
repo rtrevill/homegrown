@@ -6,27 +6,29 @@ function LocalMap(props){
     const [importedMarkers, setImportedMarkers] = useState([]);
 
 
-    console.log(importedMarkers)
+    // console.log(importedMarkers)
+    // console.log(props.produce[0]._id)
+
 
     useEffect(()=> {
-        // console.log(props.locations?.findProdLocations)
         const rejigLocations = props.produce.map((location)=>{
             return(
                 {
                     key: location.address,
                     location: {lat: location.latitude, lng: location.longitude},
-                    produce: location.userRef.currentproduce
+                    produce: location.userRef.currentproduce,
+                    id: location._id
                 }
             )
         })
-        // console.log(rejigLocations)
         setImportedMarkers(rejigLocations)
     },[props.produce])
 
-    const MarkerWithInfoWindow = ({name, position, produce}) => {
+    const MarkerWithInfoWindow = ({name, position, produce, locationId}) => {
         // `markerRef` and `marker` are needed to establish the connection between
         // the marker and infowindow (if you're using the Marker component, you
         // can use the `useMarkerRef` hook instead).
+        // console.log(id)
         const [markerRef, marker] = useAdvancedMarkerRef();
       
         const [infoWindowShown, setInfoWindowShown] = useState(false);
@@ -60,6 +62,7 @@ function LocalMap(props){
                     })
                   }  
                 </ul>
+                <a onClick={()=>props.showModal(locationId)}>More info</a>
               </InfoWindow>
             )}
           </>
@@ -80,11 +83,12 @@ function LocalMap(props){
                         }            
             >
                                 {
-                    importedMarkers ? importedMarkers.map(({key, location, produce}) => (
+                    importedMarkers ? importedMarkers.map(({key, location, produce, id}) => (
                         <MarkerWithInfoWindow 
                           name={key} 
                           position={location} 
                           produce={produce}
+                          locationId={id}
                           key={key}/>
                     )) : <></>
                 }

@@ -1,8 +1,9 @@
-import { Button, Input, Form, InputNumber } from "antd";
+import { Button, Form, InputNumber } from "antd";
 import { FIND_PROD_LOCATIONS } from "../utils/queries";
 import { useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import LocalMap from "../components/LocalMap";
+import ProducerModal from "../components/ProducerModal";
 
 
 
@@ -10,7 +11,21 @@ function FindLocal (){
     const [locat, setlocat] = useState({currentlocat: [], radius: 0})
     const [filteredData, setFilteredData] = useState([])
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [getLocations, {loading, error, data}] = useLazyQuery(FIND_PROD_LOCATIONS)
+
+    const showModal = (Id) => {
+        setIsModalOpen(true);
+        console.log(Id)
+      };
+      const handleOk = () => {
+        setIsModalOpen(false);
+      };
+      const handleCancel = () => {
+        setIsModalOpen(false);
+      };
+
 
     useEffect(()=>{
         setFilteredData([])
@@ -43,8 +58,8 @@ function FindLocal (){
     return(
         <div>
             <LocalMap 
-                // locations={data}
                 produce={filteredData}
+                showModal={showModal}
             />
             <h3> Local Produce</h3>
             <Form
@@ -59,6 +74,14 @@ function FindLocal (){
                 </Form.Item>
                 <Button type="primary" htmlType="submit">Return Local Produce</Button>
             </Form>
+            {/* <Button type="primary" onClick={showModal}>
+                Open Modal
+            </Button> */}
+            <ProducerModal 
+                isModalOpen={isModalOpen}
+                handleOk={handleOk}
+                handleCancel={handleCancel}
+            />
         </div>
     )
 };
