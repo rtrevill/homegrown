@@ -39,13 +39,24 @@ export const FIND_PRODUCE = gql`
 export const FIND_PROD_LOCATIONS = gql`
   query findProdLocations($radius: Int) {
     findProdLocations(radius: $radius) {
-      _id
-      locationtype
       address
-      locationId
-      latitude
-      longitude
+      _id
       longlat
+      longitude
+      latitude
+      userRef {
+        username
+        currentproduce {
+          _id
+          itemdetail
+          location
+          producetype {
+            _id
+            produce
+            variant
+          }
+        }
+      }
     }
   }
 `;

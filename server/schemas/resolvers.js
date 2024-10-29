@@ -64,12 +64,15 @@ const resolvers = {
         const tryThis =  await Location.find(
           {longlat: {$geoWithin: {$centerSphere: [[146.4325216, -36.4412949], radDetermine]}} }
         )
-        // .populate({
-        //   path: "userRef",
-        // })
-
-
-        console.log(tryThis)
+        .populate({
+          path: "userRef",
+          populate:({
+            path: "currentproduce",
+            populate:({
+              path: "producetype",
+            })
+          })
+        })
         return tryThis
       }catch(error){
         throw new GraphQLError(error)

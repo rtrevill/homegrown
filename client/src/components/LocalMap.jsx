@@ -9,20 +9,21 @@ function LocalMap(props){
     console.log(importedMarkers)
 
     useEffect(()=> {
-        console.log(props.locations?.findProdLocations)
-        const rejigLocations = props.locations?.findProdLocations.map((location)=>{
+        // console.log(props.locations?.findProdLocations)
+        const rejigLocations = props.produce.map((location)=>{
             return(
                 {
                     key: location.address,
-                    location: {lat: location.latitude, lng: location.longitude}
+                    location: {lat: location.latitude, lng: location.longitude},
+                    produce: location.userRef.currentproduce
                 }
             )
         })
-        console.log(rejigLocations)
+        // console.log(rejigLocations)
         setImportedMarkers(rejigLocations)
-    },[props.locations])
+    },[props.produce])
 
-    const MarkerWithInfoWindow = ({name, position}) => {
+    const MarkerWithInfoWindow = ({name, position, produce}) => {
         // `markerRef` and `marker` are needed to establish the connection between
         // the marker and infowindow (if you're using the Marker component, you
         // can use the `useMarkerRef` hook instead).
@@ -49,9 +50,16 @@ function LocalMap(props){
       
             {infoWindowShown && (
               <InfoWindow anchor={marker} onClose={handleClose}>
-                <p>InfoWindow content!{name}</p>
-                <p>Some arbitrary html to be rendered into the InfoWindow.</p>
-                <a href="http://www.google.com.au">Click Here!!</a>
+                <p>{name}</p>
+                <ul>
+                  {
+                    produce.map((item)=>{ 
+                      return(
+                        <li>{item.producetype.produce} - {item.producetype.variant}</li>
+                      )
+                    })
+                  }  
+                </ul>
               </InfoWindow>
             )}
           </>
@@ -72,8 +80,12 @@ function LocalMap(props){
                         }            
             >
                                 {
-                    importedMarkers ? importedMarkers.map(({key, location}) => (
-                        <MarkerWithInfoWindow name={key} position={location} key={key}/>
+                    importedMarkers ? importedMarkers.map(({key, location, produce}) => (
+                        <MarkerWithInfoWindow 
+                          name={key} 
+                          position={location} 
+                          produce={produce}
+                          key={key}/>
                     )) : <></>
                 }
             </Map>

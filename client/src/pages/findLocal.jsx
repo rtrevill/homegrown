@@ -8,8 +8,22 @@ import LocalMap from "../components/LocalMap";
 
 function FindLocal (){
     const [locat, setlocat] = useState({currentlocat: [], radius: 0})
+    const [filteredData, setFilteredData] = useState([])
 
     const [getLocations, {loading, error, data}] = useLazyQuery(FIND_PROD_LOCATIONS)
+
+    useEffect(()=>{
+        setFilteredData([])
+        if (data){
+            data.findProdLocations.forEach((locality)=>{
+                let newLocality = JSON.parse(JSON.stringify(locality))
+                const filteredProduce = locality.userRef?.currentproduce.filter((prod) => prod.location===locality._id);
+                newLocality.userRef.currentproduce = filteredProduce
+                setFilteredData((prevstate) => [...prevstate, newLocality])
+            })
+
+        }else return
+    },[data])
 
     const findProduce = async (values) => {
         setlocat({...locat, radius: values.kmRadius})
@@ -17,12 +31,11 @@ function FindLocal (){
 
     useEffect(()=>{
         async function getData(){
-            const findProperties = await getLocations({
+            await getLocations({
                 variables: {
                     radius: locat.radius
                 }
             })
-            console.log(findProperties.data.findProdLocations);
         }
         getData()
     },[locat])
@@ -30,7 +43,8 @@ function FindLocal (){
     return(
         <div>
             <LocalMap 
-                locations={data}
+                // locations={data}
+                produce={filteredData}
             />
             <h3> Local Produce</h3>
             <Form
