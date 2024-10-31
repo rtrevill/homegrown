@@ -18,7 +18,7 @@ const resolvers = {
         secure: false,
         auth: {
             user: 'rtrevill98@myyahoo.com',
-            pass: '**NEEDS TO BE CHANGED TO AN APP PASSWORD'
+            pass: process.env.EMAIL_PASSWORD
         },
         debug: false,
         logger: true
